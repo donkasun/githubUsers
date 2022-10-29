@@ -1,6 +1,6 @@
 import React from 'react';
 import {View, Text, TouchableOpacity} from 'react-native';
-import {StackActions} from '@react-navigation/native';
+// import {StackActions} from '@react-navigation/native';
 
 const Profile = ({route, navigation}) => {
   let number = route?.params?.number || 0; 
@@ -13,7 +13,7 @@ const Profile = ({route, navigation}) => {
             navigation.push('Profile', {number: 1 + number});
         //   navigation.dispatch(StackActions.push('Profile', {number: number+1}));
         }}>
-        <Text>Click</Text>
+        <Text>Go to New Profile screen</Text>
       </TouchableOpacity>
     </View>
   );
