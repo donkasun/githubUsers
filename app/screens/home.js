@@ -1,17 +1,10 @@
 import React, {useEffect, useState} from 'react';
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  StyleSheet,
-  TextInput,
-  Image,
-} from 'react-native';
+import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
 
 import axios from 'axios';
 
 import {githubToken} from '../../config';
-import {icons} from '../constants';
+import SearchBar from '../components/searchBar';
 
 axios.defaults.baseURL = 'https://api.github.com';
 axios.defaults.headers.common.Authorization = `bearer ${githubToken}`;
@@ -57,30 +50,11 @@ const Home = ({navigation}) => {
         }}>
         <Text>Go to Profile screen</Text>
       </TouchableOpacity>
-      <View
-        style={{
-          backgroundColor: '#c3c4c2',
-          margin: 10,
-          borderRadius: 10,
-          padding: 10,
-          flexDirection: 'row',
-          alignItems: 'center',
-        }}>
-        <Image source={icons.search} style={styles.searchIcon} />
-        <View style={{flex: 1}}>
-          <TextInput
-            style={styles.input}
-            onChangeText={onChangeText}
-            value={searchName}
-            placeholder="Enter github username"
-          />
-        </View>
-        {searchName != '' && (
-          <TouchableOpacity onPress={searchUser} hitSlop={10}>
-            <Image source={icons.rightArrow} style={styles.searchIcon} />
-          </TouchableOpacity>
-        )}
-      </View>
+      {SearchBar({
+        searchAction: searchUser,
+        searchCriteria: searchName,
+        onChangeText,
+      })}
     </View>
   );
 };
@@ -93,14 +67,6 @@ const styles = StyleSheet.create({
   greetingContainer: {
     alignItems: 'center',
     marginVertical: 10,
-  },
-  input: {
-    padding: 0,
-  },
-  searchIcon: {
-    width: 20,
-    height: 20,
-    marginRight: 10,
   },
 });
 
