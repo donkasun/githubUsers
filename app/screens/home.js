@@ -13,10 +13,6 @@ import SearchBar from '../components/searchBar';
 import ProfileCard from '../components/profileCard';
 import {useAxios} from '../hooks/useAxios';
 
-const wait = timeout => {
-  return new Promise(resolve => setTimeout(resolve, timeout));
-};
-
 const notFoundCard = () => {
   return (
     <View style={{alignItems: 'center', marginVertical: 20}}>
@@ -31,12 +27,7 @@ const notFoundCard = () => {
 const Home = ({navigation}) => {
   const [user, setUser] = useState(null);
   const [resultUser, setResultUser] = useState(null);
-  const [searchName, onChangeText] = useState('');
-
-  console.log('searchName', searchName);
-  const onRefresh = useCallback(() => {
-    searchUser();
-  }, []);
+  const [searchName, onChangeText] = useState();
 
   const {response: userData} = useAxios({
     method: 'get',
@@ -69,13 +60,17 @@ const Home = ({navigation}) => {
 
   const username = user?.name;
 
-  const searchUser = () => {
-    console.log('on refresh', searchName);
+  const searchUser = name => {
+    console.log('on refresh', searchName, name);
     execute({
       method: 'get',
-      url: `/users/${searchName}`,
+      url: `/users/${name ?? searchName}`,
     });
   };
+
+  const onRefresh = useCallback(() => {
+    searchUser(searchName);
+  }, [searchName]);
 
   const searchNameChange = text => {
     onChangeText(text);
@@ -86,11 +81,8 @@ const Home = ({navigation}) => {
     if (item?.type == 'error') {
       return notFoundCard();
     }
-
     return <ProfileCard user={item} navigation={navigation} />;
   };
-
-  console.log('searchLoading', searchLoading);
 
   return (
     <View style={styles.main}>

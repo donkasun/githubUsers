@@ -43,13 +43,13 @@ const ProfileCard = props => {
               style={{flexDirection: 'row', justifyContent: 'space-evenly'}}>
               <TouchableOpacity onPress={onFollowingClick}>
                 <Text style={styles.text}>
-                  <Text style={styles.boldText}>{user?.following ?? 0}</Text>{' '}
+                  <Text style={styles.boldText}>{user?.following ?? 0}</Text>
                   Following
                 </Text>
               </TouchableOpacity>
               <TouchableOpacity onPress={onFollowersClick}>
                 <Text style={styles.text}>
-                  <Text style={styles.boldText}>{user?.followers ?? 0}</Text>{' '}
+                  <Text style={styles.boldText}>{user?.followers ?? 0}</Text>
                   Followers
                 </Text>
               </TouchableOpacity>

@@ -6,23 +6,12 @@ import {fonts} from '../constants';
 import {useAxios} from '../hooks/useAxios';
 
 const UserLists = ({route, navigation}) => {
-  const [list, setList] = useState([]);
+  const {listType, username, title, count} = route?.params;
 
-  const listType = route?.params?.listType;
-  const username = route?.params?.username;
-  const title = route?.params?.title;
-  const count = route?.params?.count;
-
-  const {response} = useAxios({
+  const {response = []} = useAxios({
     method: 'get',
     url: `/users/${username}/${listType}`,
   });
-
-  useEffect(() => {
-    if (response != null) {
-      setList(response);
-    }
-  }, [response]);
 
   const renderProfileCard = ({item}) => {
     return <ProfileCard user={item} minimumView navigation={navigation} />;
@@ -46,7 +35,7 @@ const UserLists = ({route, navigation}) => {
         </View>
       )}
       <FlatList
-        data={list}
+        data={response}
         renderItem={renderProfileCard}
         keyExtractor={item => item?.id}
       />

@@ -14,16 +14,12 @@ export const useAxios = (axiosParams, executeOnMount = true) => {
   const fetchData = async params => {
     try {
       setLoading(true);
-      console.log("params",params);
       const result = await axios.request(params);
-      console.log('result ********', result);
       setResponse(result.data);
     } catch (error) {
-      console.warn('err', error);
       setResponse();
       setError(error);
     } finally {
-      console.log("running finally");
       setLoading(false);
     }
   };

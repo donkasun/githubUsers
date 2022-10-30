@@ -24,7 +24,7 @@ const SearchBar = ({searchAction, searchCriteria, onChangeText, reset}) => {
 
   const clickClear = () => {
     setSearched(false);
-    onChangeText('');
+    onChangeText(null);
     reset();
   };
 
@@ -40,12 +40,12 @@ const SearchBar = ({searchAction, searchCriteria, onChangeText, reset}) => {
           placeholderTextColor="gray"
         />
       </View>
-      {searchCriteria != '' && !searched && (
+      {searchCriteria && !searched && (
         <TouchableOpacity onPress={clickSearch} hitSlop={10}>
           <Image source={icons.rightArrow} style={styles.icon} />
         </TouchableOpacity>
       )}
-      {searchCriteria != '' && searched && (
+      {searchCriteria && searched && (
         <TouchableOpacity onPress={clickClear} hitSlop={10}>
           <Image source={icons.close} style={styles.icon} />
         </TouchableOpacity>
