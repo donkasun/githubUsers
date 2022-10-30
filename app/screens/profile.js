@@ -18,19 +18,22 @@ const Profile = ({route, navigation}) => {
       setUser(response);
     }
   }, [response]);
-  
-  const onFollowingClick = () => navigate('Following', 'following');
-  const onFollowersClick = () => navigate('Followers', 'followers');
-  const navigate = (title, type) => {
+
+  const onFollowingClick = () =>
+    navigate('Following', 'following', user.following);
+  const onFollowersClick = () =>
+    navigate('Followers', 'followers', user.followers);
+  const navigate = (title, type, count) => {
     navigation.push('UserList', {
       username: user?.login,
-      name: title,
+      title,
       listType: type,
+      count,
     });
   };
 
   return (
-    <View style={{flex: 1, padding: 10, backgroundColor:'lightgray'}}>
+    <View style={{flex: 1, padding: 10, backgroundColor: 'lightgray'}}>
       {user && (
         <ProfileCard
           user={user}

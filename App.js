@@ -17,7 +17,7 @@ function App() {
         <Stack.Screen
           name="UserList"
           component={UserLists}
-          options={({route}) => ({title: route.params.name})}
+          options={({route}) => ({title: route.params.title})}
         />
       </Stack.Navigator>
     </NavigationContainer>
