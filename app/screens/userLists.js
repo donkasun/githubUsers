@@ -13,7 +13,7 @@ const UserLists = ({route, navigation}) => {
   const title = route?.params?.title;
   const count = route?.params?.count;
 
-  const {response, error, loading} = useAxios({
+  const {response} = useAxios({
     method: 'get',
     url: `/users/${username}/${listType}`,
   });
@@ -25,15 +25,7 @@ const UserLists = ({route, navigation}) => {
   }, [response]);
 
   const renderProfileCard = ({item}) => {
-    return (
-      <ProfileCard
-        user={item}
-        minimumView
-        onPress={() => {
-          navigation.push('Profile', {username: item.login});
-        }}
-      />
-    );
+    return <ProfileCard user={item} minimumView navigation={navigation} />;
   };
 
   return (

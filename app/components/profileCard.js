@@ -5,11 +5,27 @@ import {fonts} from '../constants';
 import Avatar from './avatar';
 
 const ProfileCard = props => {
-  const {user, onFollowingClick, onFollowersClick, minimumView, onPress} =
-    props;
+  const {user, minimumView, disableCardClick, navigation} = props;
+
+  const onFollowingClick = () =>
+    navigate('Following', 'following', user.following);
+  const onFollowersClick = () =>
+    navigate('Followers', 'followers', user.followers);
+
+  const navigate = (title, type, count) => {
+    navigation.push('UserList', {
+      username: user?.login,
+      title,
+      listType: type,
+      count,
+    });
+  };
 
   return (
-    <TouchableOpacity style={styles.main} onPress={onPress} disabled={!minimumView}>
+    <TouchableOpacity
+      style={styles.main}
+      onPress={() => navigation.push('Profile', {username: user.login})}
+      disabled={disableCardClick}>
       <View style={styles.profileContainer}>
         <Avatar
           size={minimumView ? 'small' : 'large'}

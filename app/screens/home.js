@@ -8,52 +8,89 @@ import {
   RefreshControl,
 } from 'react-native';
 
-import axios from 'axios';
-
 import {fonts} from '../constants';
-import {githubToken} from '../../config';
 import SearchBar from '../components/searchBar';
 import ProfileCard from '../components/profileCard';
 import {useAxios} from '../hooks/useAxios';
-
-axios.defaults.baseURL = 'https://api.github.com';
-axios.defaults.headers.common.Authorization = `bearer ${githubToken}`;
 
 const wait = timeout => {
   return new Promise(resolve => setTimeout(resolve, timeout));
 };
 
-const renderProfileCard = ({item}) => {
-  return <ProfileCard user={item} />;
+const notFoundCard = () => {
+  return (
+    <View style={{alignItems: 'center', marginVertical: 20}}>
+      <Text
+        style={{fontSize: fonts.size.large, fontWeight: 'bold', color: 'gray'}}>
+        User not found
+      </Text>
+    </View>
+  );
 };
 
 const Home = ({navigation}) => {
   const [user, setUser] = useState(null);
+  const [resultUser, setResultUser] = useState(null);
   const [searchName, onChangeText] = useState('');
-  const [refreshing, setRefreshing] = useState(false);
 
+  console.log('searchName', searchName);
   const onRefresh = useCallback(() => {
-    setRefreshing(true);
-    wait(2000).then(() => setRefreshing(false));
+    searchUser();
   }, []);
 
-
-  const {response, error, loading} = useAxios({
+  const {response: userData} = useAxios({
     method: 'get',
     url: '/user',
   });
 
+  const {
+    response: foundUser,
+    error: searchError,
+    execute,
+    loading: searchLoading,
+  } = useAxios(
+    {
+      method: 'get',
+      url: `/users/${searchName}`,
+    },
+    false,
+  );
+
   useEffect(() => {
-    if (response !== null) {
-      setUser(response);
+    if (userData !== null) {
+      setUser(userData);
     }
-  }, [response]);
+    if (foundUser) {
+      setResultUser(foundUser);
+    } else if (searchError) {
+      setResultUser({id: 0, type: 'error'});
+    }
+  }, [userData, foundUser, searchError]);
 
   const username = user?.name;
-  
+
   const searchUser = () => {
-    // axios call here
+    console.log('on refresh', searchName);
+    execute({
+      method: 'get',
+      url: `/users/${searchName}`,
+    });
   };
+
+  const searchNameChange = text => {
+    onChangeText(text);
+    setResultUser(null);
+  };
+
+  const renderProfileCard = ({item}) => {
+    if (item?.type == 'error') {
+      return notFoundCard();
+    }
+
+    return <ProfileCard user={item} navigation={navigation} />;
+  };
+
+  console.log('searchLoading', searchLoading);
 
   return (
     <View style={styles.main}>
@@ -79,14 +116,16 @@ const Home = ({navigation}) => {
       {SearchBar({
         searchAction: searchUser,
         searchCriteria: searchName,
-        onChangeText,
+        onChangeText: searchNameChange,
+        reset: () => setResultUser(null),
       })}
       <FlatList
-        data={user ? [user] : []}
+        data={resultUser ? [resultUser] : []}
+        style={styles.list}
         renderItem={renderProfileCard}
         keyExtractor={item => item?.id}
         refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          <RefreshControl refreshing={searchLoading} onRefresh={onRefresh} />
         }
       />
     </View>
@@ -112,6 +151,9 @@ const styles = StyleSheet.create({
   },
   greetingContainer: {
     alignItems: 'center',
+    marginVertical: 10,
+  },
+  list: {
     marginVertical: 10,
   },
 });

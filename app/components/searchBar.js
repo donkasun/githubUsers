@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {
   View,
   Image,
@@ -9,21 +9,45 @@ import {
 
 import {icons} from '../constants';
 
-const SearchBar = ({searchAction, searchCriteria, onChangeText}) => {
+const SearchBar = ({searchAction, searchCriteria, onChangeText, reset}) => {
+  const [searched, setSearched] = useState(false);
+
+  const textChange = text => {
+    onChangeText(text);
+    setSearched(false);
+  };
+
+  const clickSearch = () => {
+    setSearched(true);
+    searchAction();
+  };
+
+  const clickClear = () => {
+    setSearched(false);
+    onChangeText('');
+    reset();
+  };
+
   return (
     <View style={styles.mainContainer}>
-      <Image source={icons.search} style={styles.searchIcon} />
+      <Image source={icons.search} style={styles.icon} />
       <View style={{flex: 1}}>
         <TextInput
           style={styles.input}
-          onChangeText={onChangeText}
+          onChangeText={textChange}
           value={searchCriteria}
           placeholder="Enter github username"
+          placeholderTextColor="gray"
         />
       </View>
-      {searchCriteria != '' && (
-        <TouchableOpacity onPress={searchAction} hitSlop={10}>
-          <Image source={icons.rightArrow} style={styles.searchIcon} />
+      {searchCriteria != '' && !searched && (
+        <TouchableOpacity onPress={clickSearch} hitSlop={10}>
+          <Image source={icons.rightArrow} style={styles.icon} />
+        </TouchableOpacity>
+      )}
+      {searchCriteria != '' && searched && (
+        <TouchableOpacity onPress={clickClear} hitSlop={10}>
+          <Image source={icons.close} style={styles.icon} />
         </TouchableOpacity>
       )}
     </View>
@@ -33,13 +57,12 @@ const SearchBar = ({searchAction, searchCriteria, onChangeText}) => {
 const styles = StyleSheet.create({
   mainContainer: {
     backgroundColor: '#c3c4c2',
-    margin: 10,
     borderRadius: 10,
     padding: 10,
     flexDirection: 'row',
     alignItems: 'center',
   },
-  searchIcon: {
+  icon: {
     width: 20,
     height: 20,
     marginRight: 10,

@@ -8,7 +8,7 @@ const Profile = ({route, navigation}) => {
   const [user, setUser] = useState(null);
   const username = route?.params?.username;
 
-  const {response, error, loading} = useAxios({
+  const {response} = useAxios({
     method: 'get',
     url: `/users/${username}`,
   });
@@ -19,26 +19,13 @@ const Profile = ({route, navigation}) => {
     }
   }, [response]);
 
-  const onFollowingClick = () =>
-    navigate('Following', 'following', user.following);
-  const onFollowersClick = () =>
-    navigate('Followers', 'followers', user.followers);
-  const navigate = (title, type, count) => {
-    navigation.push('UserList', {
-      username: user?.login,
-      title,
-      listType: type,
-      count,
-    });
-  };
-
   return (
     <View style={{flex: 1, padding: 10, backgroundColor: 'lightgray'}}>
       {user && (
         <ProfileCard
           user={user}
-          onFollowersClick={onFollowersClick}
-          onFollowingClick={onFollowingClick}
+          disableCardClick={true}
+          navigation={navigation}
         />
       )}
     </View>
