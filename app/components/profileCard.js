@@ -5,7 +5,16 @@ import {fonts} from '../constants';
 import Avatar from './avatar';
 
 const ProfileCard = props => {
-  const {profileImage, username, name, bio, followers, following} = props;
+  const {
+    profileImage,
+    username,
+    name,
+    bio,
+    followers,
+    following,
+    onFollowingClick,
+    onFollowersClick,
+  } = props;
   return (
     <View style={styles.main}>
       <View style={styles.profileContainer}>
@@ -17,11 +26,15 @@ const ProfileCard = props => {
         <Text style={styles.heading}>{name}</Text>
         <Text style={styles.text}>{`${bio ?? ''}`}</Text>
         <View style={{flexDirection: 'row', justifyContent: 'space-evenly'}}>
-          <TouchableOpacity onPress={() => {}}>
-            <Text style={styles.text}>{`${following ?? 0} Following`}</Text>
+          <TouchableOpacity onPress={onFollowingClick}>
+            <Text style={styles.text}>
+              <Text style={styles.boldText}>{following ?? 0}</Text> Following
+            </Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => {}}>
-            <Text style={styles.text}>{`${followers ?? 0} Followers`}</Text>
+          <TouchableOpacity onPress={onFollowersClick}>
+            <Text style={styles.text}>
+              <Text style={styles.boldText}>{followers ?? 0}</Text> Followers
+            </Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -63,6 +76,7 @@ const styles = StyleSheet.create({
     fontSize: fonts.size.small,
     marginVertical: 5,
   },
+  boldText: {fontWeight: 'bold'},
 });
 
 export default ProfileCard;

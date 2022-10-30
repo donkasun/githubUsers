@@ -1,46 +1,30 @@
-import React, {useState, useEffect} from 'react';
-import {View, Text, TouchableOpacity} from 'react-native';
+import React from 'react';
+import {View} from 'react-native';
 
-import axios from 'axios';
+import ProfileCard from '../components/profileCard';
 
 const Profile = ({route, navigation}) => {
-  let number = route?.params?.number || 0;
-  const loginName = route?.params?.name;
+  let user = route?.params?.user || {};
 
-  const [response, setResponse] = useState(null);
-  const [refreshing, setRefreshing] = useState(false);
-
-  const getUserDetails = () => {
-    setRefreshing(true);
-    axios
-      .get(`/user/${loginName}`)
-      .then(res => {
-        console.log(res);
-        setResponse(res);
-        setRefreshing(false);
-      })
-      .catch(err => {
-        console.log(err);
-        setRefreshing(false);
-      });
+  const onFollowersClick = () => {
+    navigation.push('UserList', {username: user?.login, name:'Following'});
+  };
+  const onFollowingClick = () => {
+    navigation.push('UserList', {username: user?.login, name:'Followers'});
   };
 
-  useEffect(() => {
-    getUserDetails();
-  }, []);
-
-  console.log('response', response);
-
   return (
-    <View style={{flex: 1}}>
-      <Text>{`Profile Screen ${number}`}</Text>
-      <TouchableOpacity
-        onPress={() => {
-          console.log('navigation', navigation);
-          navigation.push('Profile', {number: 1 + number});
-        }}>
-        <Text>Go to New Profile screen</Text>
-      </TouchableOpacity>
+    <View style={{flex: 1, padding: 10}}>
+      <ProfileCard
+        profileImage={user?.avatar_url}
+        username={user?.login}
+        name={user?.name}
+        bio={user?.bio}
+        followers={user?.followers}
+        following={user?.following}
+        onFollowersClick={onFollowersClick}
+        onFollowingClick={onFollowingClick}
+      />
     </View>
   );
 };
