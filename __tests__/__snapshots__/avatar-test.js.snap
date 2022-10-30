@@ -1,0 +1,22 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders correctly 1`] = `
+<Image
+  defaultSource={
+    Object {
+      "testUri": "../../../app/assets/images/user.png",
+    }
+  }
+  source={
+    Object {
+      "uri": undefined,
+    }
+  }
+  style={
+    Object {
+      "height": 30,
+      "width": 30,
+    }
+  }
+/>
+`;

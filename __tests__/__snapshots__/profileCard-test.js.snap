@@ -1,0 +1,182 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders correctly 1`] = `
+<View
+  accessible={true}
+  collapsable={false}
+  focusable={true}
+  onClick={[Function]}
+  onResponderGrant={[Function]}
+  onResponderMove={[Function]}
+  onResponderRelease={[Function]}
+  onResponderTerminate={[Function]}
+  onResponderTerminationRequest={[Function]}
+  onStartShouldSetResponder={[Function]}
+  style={
+    Object {
+      "alignItems": "center",
+      "backgroundColor": "lightgray",
+      "borderRadius": 10,
+      "flexDirection": "row",
+      "marginBottom": 10,
+      "opacity": 1,
+      "padding": 15,
+    }
+  }
+>
+  <View
+    style={
+      Object {
+        "justifyContent": "center",
+        "marginRight": 10,
+      }
+    }
+  >
+    <Image
+      defaultSource={
+        Object {
+          "testUri": "../../../app/assets/images/user.png",
+        }
+      }
+      source={
+        Object {
+          "uri": undefined,
+        }
+      }
+      style={
+        Object {
+          "height": 80,
+          "width": 80,
+        }
+      }
+    />
+  </View>
+  <View
+    style={
+      Object {
+        "backgroundColor": "gray",
+        "height": "80%",
+        "marginHorizontal": 5,
+        "width": 1,
+      }
+    }
+  />
+  <View
+    style={
+      Object {
+        "flex": 1,
+        "margin": 10,
+      }
+    }
+  >
+    <Text
+      style={
+        Object {
+          "fontSize": 15,
+        }
+      }
+    >
+      @undefined
+    </Text>
+    <Text
+      style={
+        Object {
+          "fontSize": 20,
+          "fontWeight": "bold",
+        }
+      }
+    />
+    <Text
+      style={
+        Object {
+          "fontSize": 13,
+          "marginVertical": 5,
+        }
+      }
+    />
+    <View
+      style={
+        Object {
+          "flexDirection": "row",
+          "justifyContent": "space-evenly",
+        }
+      }
+    >
+      <View
+        accessible={true}
+        collapsable={false}
+        focusable={true}
+        onClick={[Function]}
+        onResponderGrant={[Function]}
+        onResponderMove={[Function]}
+        onResponderRelease={[Function]}
+        onResponderTerminate={[Function]}
+        onResponderTerminationRequest={[Function]}
+        onStartShouldSetResponder={[Function]}
+        style={
+          Object {
+            "opacity": 1,
+          }
+        }
+      >
+        <Text
+          style={
+            Object {
+              "fontSize": 13,
+              "marginVertical": 5,
+            }
+          }
+        >
+          <Text
+            style={
+              Object {
+                "fontWeight": "bold",
+              }
+            }
+          >
+            0
+          </Text>
+          Following
+        </Text>
+      </View>
+      <View
+        accessible={true}
+        collapsable={false}
+        focusable={true}
+        onClick={[Function]}
+        onResponderGrant={[Function]}
+        onResponderMove={[Function]}
+        onResponderRelease={[Function]}
+        onResponderTerminate={[Function]}
+        onResponderTerminationRequest={[Function]}
+        onStartShouldSetResponder={[Function]}
+        style={
+          Object {
+            "opacity": 1,
+          }
+        }
+      >
+        <Text
+          style={
+            Object {
+              "fontSize": 13,
+              "marginVertical": 5,
+            }
+          }
+        >
+          <Text
+            style={
+              Object {
+                "fontWeight": "bold",
+              }
+            }
+          >
+            0
+          </Text>
+          Followers
+        </Text>
+      </View>
+    </View>
+  </View>
+</View>
+`;
