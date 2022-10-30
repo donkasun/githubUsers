@@ -1,30 +1,43 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {View} from 'react-native';
 
 import ProfileCard from '../components/profileCard';
+import {useAxios} from '../hooks/useAxios';
 
 const Profile = ({route, navigation}) => {
-  let user = route?.params?.user || {};
+  const [user, setUser] = useState(null);
+  const username = route?.params?.username;
 
-  const onFollowersClick = () => {
-    navigation.push('UserList', {username: user?.login, name:'Following'});
-  };
-  const onFollowingClick = () => {
-    navigation.push('UserList', {username: user?.login, name:'Followers'});
+  const {response, error, loading} = useAxios({
+    method: 'get',
+    url: `/users/${username}`,
+  });
+
+  useEffect(() => {
+    if (response !== null) {
+      setUser(response);
+    }
+  }, [response]);
+  
+  const onFollowingClick = () => navigate('Following', 'following');
+  const onFollowersClick = () => navigate('Followers', 'followers');
+  const navigate = (title, type) => {
+    navigation.push('UserList', {
+      username: user?.login,
+      name: title,
+      listType: type,
+    });
   };
 
   return (
-    <View style={{flex: 1, padding: 10}}>
-      <ProfileCard
-        profileImage={user?.avatar_url}
-        username={user?.login}
-        name={user?.name}
-        bio={user?.bio}
-        followers={user?.followers}
-        following={user?.following}
-        onFollowersClick={onFollowersClick}
-        onFollowingClick={onFollowingClick}
-      />
+    <View style={{flex: 1, padding: 10, backgroundColor:'lightgray'}}>
+      {user && (
+        <ProfileCard
+          user={user}
+          onFollowersClick={onFollowersClick}
+          onFollowingClick={onFollowingClick}
+        />
+      )}
     </View>
   );
 };

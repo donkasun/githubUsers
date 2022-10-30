@@ -14,6 +14,7 @@ import {fonts} from '../constants';
 import {githubToken} from '../../config';
 import SearchBar from '../components/searchBar';
 import ProfileCard from '../components/profileCard';
+import {useAxios} from '../hooks/useAxios';
 
 axios.defaults.baseURL = 'https://api.github.com';
 axios.defaults.headers.common.Authorization = `bearer ${githubToken}`;
@@ -23,20 +24,11 @@ const wait = timeout => {
 };
 
 const renderProfileCard = ({item}) => {
-  return (
-    <ProfileCard
-      profileImage={item?.avatar_url}
-      username={item?.login}
-      name={item?.name}
-      bio={item?.bio}
-      followers={item?.followers}
-      following={item?.following}
-    />
-  );
+  return <ProfileCard user={item} />;
 };
 
 const Home = ({navigation}) => {
-  const [response, setResponse] = useState(null);
+  const [user, setUser] = useState(null);
   const [searchName, onChangeText] = useState('');
   const [refreshing, setRefreshing] = useState(false);
 
@@ -45,30 +37,20 @@ const Home = ({navigation}) => {
     wait(2000).then(() => setRefreshing(false));
   }, []);
 
-  const getPersonalProfile = () => {
-    setRefreshing(true);
-    axios
-      .get('/user')
-      .then(res => {
-        console.log(res);
-        setResponse(res);
-        setRefreshing(false);
-      })
-      .catch(err => {
-        console.log(err);
-        setRefreshing(false);
-      });
-  };
+
+  const {response, error, loading} = useAxios({
+    method: 'get',
+    url: '/user',
+  });
 
   useEffect(() => {
-    getPersonalProfile();
-  }, []);
+    if (response !== null) {
+      setUser(response);
+    }
+  }, [response]);
 
-  console.log('response', response);
-
-  const user = response?.data;
-  const userName = user?.name;
-
+  const username = user?.name;
+  
   const searchUser = () => {
     // axios call here
   };
@@ -77,26 +59,19 @@ const Home = ({navigation}) => {
     <View style={styles.main}>
       {user && (
         <TouchableOpacity
-          style={{alignSelf: 'flex-end'}}
-          onPress={() => {
-            navigation.push('Profile', {user: user});
-          }}>
+          style={styles.profileContainer}
+          onPress={() => navigation.push('Profile', {username: user?.login})}>
           <Text style={{fontSize: fonts.size.small}}>My Profile</Text>
         </TouchableOpacity>
       )}
       <View style={styles.greetingContainer}>
-        <Text style={{fontSize: fonts.size.medium, fontWeight: 'bold'}}>
-          {userName
-            ? `Welcome ${userName}`
+        <Text style={styles.header}>
+          {username
+            ? `Welcome ${username}`
             : "Looks like we counldn't find you on Github"}
         </Text>
-        {!userName && (
-          <Text
-            style={{
-              fontSize: fonts.size.small,
-              textAlign: 'center',
-              marginTop: 10,
-            }}>
+        {!username && (
+          <Text style={styles.warningMessage}>
             Make sure to update the config with Github access token in config
           </Text>
         )}
@@ -122,6 +97,18 @@ const styles = StyleSheet.create({
   main: {
     flex: 1,
     padding: 10,
+  },
+  profileContainer: {
+    alignSelf: 'flex-end',
+  },
+  header: {
+    fontSize: fonts.size.medium,
+    fontWeight: 'bold',
+  },
+  warningMessage: {
+    fontSize: fonts.size.small,
+    textAlign: 'center',
+    marginTop: 10,
   },
   greetingContainer: {
     alignItems: 'center',
